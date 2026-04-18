@@ -1,9 +1,6 @@
 package inventrack.user.model;
 
 public class User {
-package com.user.model;
-
-    public class User {
         private int id;
         private String name;
         private String email;
@@ -66,4 +63,4 @@ package com.user.model;
         }
     }
 
-}
+
