@@ -26,6 +26,31 @@ public class UserDAO implements UserInterface{
 
     @Override
     public User loginUser(String email, String password) {
+
+        String sql = "SELECT * FROM user WHERE email=?";
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+        ) {
+            ps.setString(1,email);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                String hashedPassword = rs.getString("password");
+                if(BCrypt.checkpw(password,hashedPassword)) {
+                    return new User(
+                            rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("email"),
+                            hashedPassword,
+                            rs.getString("role")
+                    );
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
         return null;
     }
 }
