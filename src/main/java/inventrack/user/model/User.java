@@ -18,7 +18,7 @@ public class User {
     private Date lastLogin;
 
     // Constructors
-    public User() {
+    public User() { // default constructor
     }
 
     public User(String username, String password, String fullName, String email, String phone, int roleId) {
@@ -30,15 +30,13 @@ public class User {
         this.roleId = roleId;
         this.isActive = false;
     }
-    // getters and setters
+    // getters and setters for the User model class
 
     public int getId() {
-
         return id;
     }
 
     public void setId(int id) {
-
         this.id = id;
     }
 
