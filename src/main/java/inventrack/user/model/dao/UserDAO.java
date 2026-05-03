@@ -1,6 +1,12 @@
 package inventrack.user.model.dao;
 
 import inventrack.user.model.User;
+import inventrack.utils.DBConnection;
+import org.mindrot.jbcrypt.BCrypt;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class UserDAO implements UserInterface{
     @Override
@@ -8,13 +14,14 @@ public class UserDAO implements UserInterface{
         if(user.getEmail().trim().isEmpty() || user.getPassword().trim().isEmpty()){
             return false;
         }
-        String sql = "INSER INTO user(name,email,password,role) values(?,?,?,?)";
+        String sql = "INSERT INTO `user`(name,email,password,role) VALUES (?,?,?,?)";
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
         ) {
+            String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
             ps.setString(1,user.getName());
             ps.setString(2, user.getEmail());
-            ps.setString(3,user.getPassword());
+            ps.setString(3, hashedPassword);
             ps.setString(4,user.getRole());
             int row = ps.executeUpdate();
             return row > 0;
@@ -27,7 +34,7 @@ public class UserDAO implements UserInterface{
     @Override
     public User loginUser(String email, String password) {
 
-        String sql = "SELECT * FROM user WHERE email=?";
+        String sql = "SELECT * FROM `user` WHERE email=?";
 
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
