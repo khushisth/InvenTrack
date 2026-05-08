@@ -60,12 +60,23 @@ set ERROR_CODE=0
 @REM ==== START VALIDATION ====
 if not "%JAVA_HOME%" == "" goto OkJHome
 
+@REM If JAVA_HOME is not set, try to derive it from `java.exe` on PATH.
+for /f "delims=" %%i in ('where java 2^>nul') do (
+  set "JAVA_EXE=%%i"
+  goto FoundJavaExe
+)
+
 echo.
 echo Error: JAVA_HOME not found in your environment. >&2
 echo Please set the JAVA_HOME variable in your environment to match the >&2
 echo location of your Java installation. >&2
 echo.
 goto error
+
+:FoundJavaExe
+for %%j in ("%JAVA_EXE%") do set "JAVA_HOME=%%~dpj.."
+for %%k in ("%JAVA_HOME%") do set "JAVA_HOME=%%~fk"
+goto OkJHome
 
 :OkJHome
 if exist "%JAVA_HOME%\bin\java.exe" goto init
