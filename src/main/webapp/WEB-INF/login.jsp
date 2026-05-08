@@ -1,3 +1,10 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: amick Khada
+  Date: 5/2/2026
+  Time: 9:21 PM
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
@@ -55,3 +62,4 @@
 </div>
 </body>
 </html>
+

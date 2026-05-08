@@ -1,4 +1,4 @@
-package inventrack.user.model;
+package inventrack.model;
 
 public class Product {
     private int id;

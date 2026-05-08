@@ -1,0 +1,122 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: amick Khada
+  Date: 5/2/2026
+  Time: 9:17 PM
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - InvenTrack</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
+    <style>
+        .page-container { display: flex; min-height: 100vh; }
+        .sidebar { width: 250px; background: var(--dark); color: var(--white); padding: 2rem 1rem; }
+        .sidebar a { color: var(--gray); text-decoration: none; display: block; padding: 0.75rem 1rem; margin-bottom: 0.5rem; border-radius: 0.5rem; transition: var(--transition); }
+        .sidebar a:hover, .sidebar a.active { background: rgba(255, 255, 255, 0.1); color: var(--white); }
+        .main-content { flex: 1; padding: 2rem; background: var(--light); }
+        .user-table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
+        .user-table th, .user-table td { padding: 1rem; text-align: left; border-bottom: 1px solid #E5E7EB; }
+        .user-table th { background: var(--gray-light); font-weight: 600; }
+        .status-badge { padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 500; }
+        .status-active { background: #D1FAE5; color: #065F46; }
+        .status-inactive { background: #FEE2E2; color: #991B1B; }
+        .status-approved { background: #DBEAFE; color: #1E40AF; }
+        .status-pending { background: #FEF3C7; color: #92400E; }
+        .btn-approve { background: var(--success); color: var(--white); border: none; padding: 0.5rem 1rem; border-radius: 0.375rem; cursor: pointer; }
+        .btn-approve:hover { background: #059669; }
+    </style>
+</head>
+<body>
+<div class="page-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 style="margin-bottom: 2rem; padding-left: 1rem;">InvenTrack</h2>
+        <nav>
+            <a href="${pageContext.request.contextPath}/dashboard">Dashboard</a>
+            <a href="${pageContext.request.contextPath}/products">Inventory</a>
+            <a href="${pageContext.request.contextPath}/pos">Point of Sale</a>
+            <a href="${pageContext.request.contextPath}/users" class="active">User Management</a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1 style="font-size: 1.5rem; font-weight: 700;">User Management</h1>
+                <p style="color: var(--gray); font-size: 0.875rem; margin-top: 0.25rem;">Manage user accounts and approvals</p>
+            </div>
+        </div>
+
+        <c:if test="${not empty successMessage}">
+            <div class="alert alert-success">
+                    ${successMessage}
+            </div>
+        </c:if>
+
+        <c:if test="${not empty errorMessage}">
+            <div class="alert alert-danger">
+                    ${errorMessage}
+            </div>
+        </c:if>
+
+        <table class="user-table">
+            <thead>
+            <tr>
+                <th>Username</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Approval</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="user" items="${users}">
+                <tr>
+                    <td>${user.username}</td>
+                    <td>${user.fullName}</td>
+                    <td>${user.email}</td>
+                    <td>${user.roleName}</td>
+                    <td>
+                                <span class="status-badge ${user.active ? 'status-active' : 'status-inactive'}">
+                                        ${user.active ? 'Active' : 'Inactive'}
+                                </span>
+                    </td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${user.roleName eq 'Admin'}">
+                                <span class="status-badge status-approved">Auto-approved</span>
+                            </c:when>
+                            <c:when test="${user.approved}">
+                                <span class="status-badge status-approved">Approved</span>
+                            </c:when>
+                            <c:otherwise>
+                                <span class="status-badge status-pending">Pending</span>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                    <td>
+                        <c:if test="${!user.approved && user.roleName ne 'Admin'}">
+                            <form action="${pageContext.request.contextPath}/users" method="POST" style="display: inline;">
+                                <input type="hidden" name="action" value="approve">
+                                <input type="hidden" name="userId" value="${user.id}">
+                                <button type="submit" class="btn-approve">Approve</button>
+                            </form>
+                        </c:if>
+                    </td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
