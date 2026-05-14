@@ -115,3 +115,39 @@
         </div>
       </div>
     </div>
+    <div class="table-container" style="background: var(--white); padding: 1.5rem; border-radius: 0.5rem; border: 1px solid #E5E7EB;">
+      <h2 style="font-size: 1.125rem; margin-bottom: 1rem;">Recent Activity</h2>
+      <c:if test="${empty recentOrders}">
+        <p style="color: var(--gray); font-size: 0.875rem;">No recent transactions available.</p>
+      </c:if>
+      <c:if test="${not empty recentOrders}">
+        <table style="width: 100%; text-align: left; border-collapse: collapse;">
+          <thead>
+          <tr style="border-bottom: 1px solid #E5E7EB; color: var(--gray); font-size: 0.875rem;">
+            <th style="padding-bottom: 0.5rem;">Order ID</th>
+            <th style="padding-bottom: 0.5rem;">Cashier</th>
+            <th style="padding-bottom: 0.5rem;">Date</th>
+            <th style="padding-bottom: 0.5rem;">Total Amount</th>
+            <th style="padding-bottom: 0.5rem;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <c:forEach var="order" items="${recentOrders}">
+            <tr style="border-bottom: 1px solid #F3F4F6;">
+              <td style="padding: 1rem 0;">#${order.id}</td>
+              <td style="padding: 1rem 0;">${order.cashierName}</td>
+              <td style="padding: 1rem 0;">${order.createdAt}</td>
+              <td style="padding: 1rem 0; font-weight: bold;">$${order.totalAmount}</td>
+              <td style="padding: 1rem 0;">
+                <span style="background: #D1FAE5; color: #065F46; padding: 0.25rem 0.5rem; border-radius: 999px; font-size: 0.75rem;">${order.status}</span>
+              </td>
+            </tr>
+          </c:forEach>
+          </tbody>
+        </table>
+      </c:if>
+    </div>
+  </div>
+</div>
+</body>
+</html>
