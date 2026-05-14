@@ -55,3 +55,63 @@
     .metric-info p { font-size: 1.5rem; font-weight: 700; color: var(--dark); }
   </style>
 </head>
+<body>
+<div class="page-container">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2 style="margin-bottom: 2rem; padding-left: 1rem;">InvenTrack</h2>
+    <nav>
+      <a href="${pageContext.request.contextPath}/dashboard" class="active">Dashboard</a>
+      <a href="${pageContext.request.contextPath}/products">Inventory</a>
+      <a href="${pageContext.request.contextPath}/pos">Point of Sale</a>
+      <c:if test="${sessionScope.role eq 'Admin'}">
+        <a href="${pageContext.request.contextPath}/users">User Management</a>
+      </c:if>
+    </nav>
+    <div class="user-info">
+      <div style="font-size: 0.75rem; color: var(--gray);">Logged in as</div>
+      <div style="font-size: 0.875rem; font-weight: 600;">${sessionScope.user.fullName}</div>
+      <div style="font-size: 0.75rem; color: #93C5FD;">Role: ${sessionScope.role}</div>
+    </div>
+    <a href="${pageContext.request.contextPath}/logout" class="logout-link">Logout</a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <h1 style="font-size: 1.5rem; font-weight: 700;">Dashboard Overview</h1>
+        <p style="color: var(--gray); font-size: 0.875rem; margin-top: 0.25rem;">Welcome back, ${sessionScope.user.fullName}!</p>
+      </div>
+    </div>
+
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="metric-icon icon-revenue">$</div>
+        <div class="metric-info">
+          <h3>Total Revenue</h3>
+          <p>$${totalRevenue}</p>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon icon-orders">🛒</div>
+        <div class="metric-info">
+          <h3>Total Orders</h3>
+          <p>${totalOrders}</p>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon icon-products">📦</div>
+        <div class="metric-info">
+          <h3>Total Products</h3>
+          <p>${totalProducts}</p>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon icon-alerts">⚠️</div>
+        <div class="metric-info">
+          <h3>Low Stock Alerts</h3>
+          <p>${lowStockCount}</p>
+        </div>
+      </div>
+    </div>
