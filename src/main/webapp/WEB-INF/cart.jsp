@@ -160,3 +160,42 @@
                     </c:otherwise>
                 </c:choose>
             </div>
+            <div class="cart-card cart-summary">
+                <h2 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1.25rem;">Order Summary</h2>
+                <div class="totals-row">
+                    <span>Items</span>
+                    <span>${not empty cart ? cart.items.size() : 0}</span>
+                </div>
+                <div class="totals-row">
+                    <span>Subtotal</span>
+                    <span>$${not empty cart ? cart.subtotal : '0.00'}</span>
+                </div>
+                <div class="totals-row">
+                    <span>Discount</span>
+                    <span>$${not empty cart ? cart.discount : '0.00'}</span>
+                </div>
+                <div class="totals-row grand-total">
+                    <span>Total</span>
+                    <span>$${not empty cart ? cart.total : '0.00'}</span>
+                </div>
+
+                <form action="${pageContext.request.contextPath}/cart" method="POST" style="margin-top: 1.5rem;">
+                    <input type="hidden" name="action" value="checkout">
+                    <input type="hidden" name="returnTo" value="cart">
+                    <c:choose>
+                        <c:when test="${empty cart or empty cart.items}">
+                            <button type="submit" class="btn btn-primary" style="width: 100%; opacity: 0.5; cursor: not-allowed;" disabled>Complete Checkout</button>
+                        </c:when>
+                        <c:otherwise>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Complete Checkout</button>
+                        </c:otherwise>
+                    </c:choose>
+                </form>
+                <a href="${pageContext.request.contextPath}/pos" style="display: block; text-align: center; margin-top: 1rem; color: var(--gray); font-size: 0.875rem; text-decoration: none;">Continue shopping</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
