@@ -71,3 +71,92 @@
             .cart-layout { grid-template-columns: 1fr; }
         }
     </style>
+</head>
+<body>
+<div class="page-container">
+    <div class="sidebar">
+        <h2 style="margin-bottom: 2rem; padding-left: 1rem;">InvenTrack</h2>
+        <nav>
+            <c:if test="${sessionScope.role eq 'Admin'}">
+                <a href="${pageContext.request.contextPath}/dashboard">Dashboard</a>
+            </c:if>
+            <a href="${pageContext.request.contextPath}/pos">Point of Sale</a>
+            <a href="${pageContext.request.contextPath}/cart" class="active">Shopping Cart</a>
+            <c:if test="${sessionScope.role eq 'Stock Manager'}">
+                <a href="${pageContext.request.contextPath}/products">Inventory</a>
+            </c:if>
+        </nav>
+        <div class="user-info" style="margin-top: auto;">
+            <div style="font-size: 0.75rem; color: var(--gray);">Logged in as</div>
+            <div style="font-size: 0.875rem; font-weight: 600;">${sessionScope.user.fullName}</div>
+            <div style="font-size: 0.75rem; color: #93C5FD;">Role: ${sessionScope.role}</div>
+        </div>
+        <a href="${pageContext.request.contextPath}/logout" class="logout-link">Logout</a>
+    </div>
+
+    <div class="main-content">
+        <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <h1 style="font-size: 1.5rem; font-weight: 700;">Shopping Cart</h1>
+                <p style="color: var(--gray); font-size: 0.875rem; margin-top: 0.25rem;">Review items before checkout.</p>
+            </div>
+            <a href="${pageContext.request.contextPath}/pos" class="btn btn-primary" style="width: auto;">+ Add More Items</a>
+        </div>
+
+        <c:if test="${not empty sessionScope.checkoutSuccess}">
+        <div class="alert alert-success" style="margin-bottom: 1rem;">${sessionScope.checkoutSuccess}</div>
+            <c:remove var="checkoutSuccess" scope="session"/>
+        </c:if>
+        <c:if test="${not empty sessionScope.checkoutError}">
+        <div class="alert alert-danger" style="margin-bottom: 1rem;">${sessionScope.checkoutError}</div>
+            <c:remove var="checkoutError" scope="session"/>
+        </c:if>
+
+        <c:set var="cart" value="${sessionScope.cart}" />
+
+        <div class="cart-layout">
+            <div class="cart-card">
+                <c:choose>
+                    <c:when test="${empty cart or empty cart.items}">
+                        <div class="empty-cart">
+                            <p style="font-size: 1.125rem; margin-bottom: 0.5rem;">Your cart is empty</p>
+                            <p style="font-size: 0.875rem; margin-bottom: 1.5rem;">Browse products at the POS terminal to add items.</p>
+                            <a href="${pageContext.request.contextPath}/pos" class="btn btn-primary" style="width: auto; display: inline-block;">Go to POS</a>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="cart-header-bar">
+                            <span>Product</span>
+                            <span>Unit Price</span>
+                            <span>Qty</span>
+                            <span>Subtotal</span>
+                        </div>
+                        <c:forEach var="item" items="${cart.items}">
+                            <div class="cart-item-row">
+                                <div>
+                                    <div class="cart-item-name">${item.product.name}</div>
+                                    <div class="cart-item-meta">SKU: ${item.product.sku}</div>
+                                </div>
+                                <span>$${item.product.price}</span>
+                                <span>${item.quantity}</span>
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <span style="font-weight: 600;">$${item.subtotal}</span>
+                                    <form action="${pageContext.request.contextPath}/cart" method="POST" style="margin: 0;">
+                                        <input type="hidden" name="action" value="remove">
+                                        <input type="hidden" name="productId" value="${item.product.id}">
+                                        <input type="hidden" name="returnTo" value="cart">
+                                        <button type="submit" class="btn-remove" title="Remove item">Remove</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </c:forEach>
+                        <div style="padding: 1rem 1.5rem; border-top: 1px solid #E5E7EB; text-align: right;">
+                            <form action="${pageContext.request.contextPath}/cart" method="POST" style="display: inline;">
+                                <input type="hidden" name="action" value="clear">
+                                <input type="hidden" name="returnTo" value="cart">
+                                <button type="submit" class="btn-remove">Clear entire cart</button>
+                            </form>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </div>
