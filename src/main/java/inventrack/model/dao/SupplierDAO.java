@@ -27,6 +27,7 @@ public class SupplierDAO {
                 ));
             }
         } catch (Exception e) {
+
             e.printStackTrace();
         }
         return suppliers;
