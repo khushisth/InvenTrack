@@ -10,7 +10,7 @@ public class DBConnection {
 
     public static Connection getConnection() throws Exception {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        return DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
+        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
     }
 }
 

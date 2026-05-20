@@ -2,6 +2,7 @@ package inventrack.user.model.dao;
 
 import inventrack.user.model.User;
 import inventrack.utils.DBConnection;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
