@@ -26,6 +26,11 @@ public class CartServlet extends HttpServlet {
     }
 
     @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("/cart.jsp").forward(request, response);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
         HttpSession session = request.getSession();
@@ -65,7 +70,18 @@ public class CartServlet extends HttpServlet {
             }
         }
 
-        response.sendRedirect(request.getContextPath() + "/pos");
+        String returnTo = request.getParameter("returnTo");
+        if ("cart".equals(returnTo)) {
+            response.sendRedirect(request.getContextPath() + "/cart");
+        } else if ("buyer-dashboard".equals(returnTo)) {
+            response.sendRedirect(request.getContextPath() + "/buyer-dashboard");
+        } else {
+            User user = (User) session.getAttribute("user");
+            if (user != null && "Buyer".equalsIgnoreCase(user.getRoleName())) {
+                response.sendRedirect(request.getContextPath() + "/buyer-dashboard");
+            } else {
+                response.sendRedirect(request.getContextPath() + "/pos");
+            }
+        }
     }
 }
-
